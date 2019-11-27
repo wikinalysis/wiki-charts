@@ -1,20 +1,9 @@
 import * as React from "react";
-import { D3ScatterPlot } from "./D3ScatterPlot";
-
-export interface IChartConfig<P extends any> {
-  margin: { top: number; bottom: number; left: number; right: number };
-  getColor: (v: P) => string;
-  getX: (v: P) => any;
-  getY: (v: P) => any;
-  height: number;
-  width: number;
-  xMax: number;
-  yMax: number;
-}
+import { ScatterPlot as D3Plot, ScatterPlotConfig } from "../../d3/ScatterPlot";
 
 export interface IScatterPlotProps<P extends any> {
-  data: Record<string, P>[];
-  config: IChartConfig<P>;
+  data: P[];
+  config: ScatterPlotConfig<P>;
 }
 
 class ScatterPlot extends React.Component<any, any> {
@@ -27,7 +16,7 @@ class ScatterPlot extends React.Component<any, any> {
   }
 
   componentDidMount() {
-    this._chart = D3ScatterPlot.create(
+    this._chart = D3Plot.create(
       this._rootNode.current,
       this.props.data,
       this.props.config
@@ -35,7 +24,7 @@ class ScatterPlot extends React.Component<any, any> {
   }
 
   componentDidUpdate() {
-    D3ScatterPlot.update(
+    D3Plot.update(
       this._rootNode.current,
       this.props.data,
       this.props.config,
@@ -44,7 +33,7 @@ class ScatterPlot extends React.Component<any, any> {
   }
 
   componentWillUnmount() {
-    D3ScatterPlot.destroy(this._rootNode.current);
+    D3Plot.destroy(this._rootNode.current, this.props.config, this._chart);
   }
 
   render() {
