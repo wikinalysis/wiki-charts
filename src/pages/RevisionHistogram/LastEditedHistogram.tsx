@@ -6,7 +6,6 @@ import { schemeCategory10 } from "d3";
 
 export interface LastEditedHistogramProps {
   language: string;
-  header: string;
 }
 
 interface LastEditedHistogramState {
@@ -60,13 +59,10 @@ class LastEditedHistogram extends React.Component<
 
   render() {
     return (
-      <>
-        <h3>{this.props.header}</h3>
-        <TimeSeries
-          data={this.state.data}
-          config={this.state.config}
-        ></TimeSeries>
-      </>
+      <TimeSeries
+        data={this.state.data}
+        config={this.state.config}
+      ></TimeSeries>
     );
   }
 }

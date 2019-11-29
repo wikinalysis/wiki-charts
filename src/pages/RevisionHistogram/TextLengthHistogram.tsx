@@ -6,7 +6,6 @@ import { schemeCategory10 } from "d3";
 
 export interface TextLengthHistogramProps {
   language: string;
-  header: string;
 }
 
 interface TextLengthHistogramState {
@@ -52,13 +51,7 @@ class TextLengthHistogram extends React.Component<
 
   render() {
     return (
-      <>
-        <h3>{this.props.header}</h3>
-        <Histogram
-          data={this.state.data}
-          config={this.state.config}
-        ></Histogram>
-      </>
+      <Histogram data={this.state.data} config={this.state.config}></Histogram>
     );
   }
 }

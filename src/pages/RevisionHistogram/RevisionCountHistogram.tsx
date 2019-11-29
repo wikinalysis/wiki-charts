@@ -6,7 +6,6 @@ import { Histogram } from "../../components/Histogram";
 
 export interface RevisionCountHistogramProps {
   language: string;
-  header: string;
 }
 
 interface RevisionCountHistogramState {
@@ -59,13 +58,10 @@ class RevisionCountHistogram extends React.Component<
 
   render() {
     return (
-      <>
-        <h3>{this.props.header}</h3>
         <Histogram
           data={this.state.data}
           config={this.state.config}
         ></Histogram>
-      </>
     );
   }
 }

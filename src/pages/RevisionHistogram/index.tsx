@@ -15,12 +15,9 @@ const RevisionHistogramPage = () => {
   return (
     <React.Fragment>
       <LanguageSelect languages={CURRENT_LANGUAGES} setLanguage={setLanguage} />
-      <LastEditedHistogram language={language} header="Last Edited" />
-      <RevisionCountHistogram
-        language={language}
-        header="Number of Revisions"
-      />
-      <TextLengthHistogram language={language} header="Article Length" />
+      <LastEditedHistogram language={language} />
+      <RevisionCountHistogram language={language} />
+      <TextLengthHistogram language={language} />
     </React.Fragment>
   );
 };
