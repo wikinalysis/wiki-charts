@@ -6,8 +6,7 @@ import { LastEditedHistogram } from "./LastEditedHistogram";
 import { Container, Row, Col } from "react-bootstrap";
 
 const CURRENT_LANGUAGES = [
-  { value: "rmy", label: "Romani" },
-  { value: "pih", label: "Norfolk Island" },
+  { value: "ltg", label: "Latgalian" },
   { value: "tn", label: "Setswana" }
 ];
 
