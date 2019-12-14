@@ -4,22 +4,26 @@ import { TextLengthHistogram } from "./TextLengthHistogram";
 import { RevisionCountHistogram } from "./RevisionCountHistogram";
 import { LastEditedHistogram } from "./LastEditedHistogram";
 import { Container, Row, Col } from "react-bootstrap";
-
-const CURRENT_LANGUAGES = [
-  { value: "ltg", label: "Latgalian" },
-  { value: "tn", label: "Setswana" }
-];
+import api from "../../api";
 
 const RevisionHistogramPage = () => {
   const [language, setLanguage] = React.useState("");
+  const [languages, setLanguages] = React.useState([] as any[]);
+  React.useEffect(() => {
+    api.getCurrentWikis({}).then(response => {
+      const data = response.data.map((wiki: any) => ({
+        ...wiki,
+        value: wiki.id,
+        label: `${wiki.language} (${wiki.languageLocal})`
+      }));
+      setLanguages(data);
+    });
+  }, []);
   return (
     <Container>
       <Row>
         <Col md={{ span: 4, offset: 4 }}>
-          <LanguageSelect
-            languages={CURRENT_LANGUAGES}
-            setLanguage={setLanguage}
-          />
+          <LanguageSelect languages={languages} setLanguage={setLanguage} />
         </Col>
       </Row>
       <Row>

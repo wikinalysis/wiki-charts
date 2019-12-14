@@ -20,6 +20,11 @@ export const createApiService = (axios: AxiosInstance) => ({
   getPostById: doNothing,
   getRevisions: doNothing,
   getRevisionById: doNothing,
+  getCurrentWikis: (params: {}) => {
+    return axios.get("/wikis/current", { params }) as Promise<
+      ApiResponse<any[], any>
+    >;
+  },
   getRevisionsField: (params: {
     language: string;
     field: "createdAt" | "textLength";

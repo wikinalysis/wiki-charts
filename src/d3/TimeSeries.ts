@@ -1,7 +1,6 @@
 import * as d3 from "d3";
 import { D3Object, ID3Config } from "./d3.interfaces";
 import {
-  createXAxis,
   createSvgContainer,
   createYAxis,
   createDefaultTransition,
@@ -28,8 +27,6 @@ const safeLength = (yAxis: any, d: any) => {
 };
 
 const parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%SZ");
-const formatDate = d3.timeFormat("%m/%y");
-const formatCount = d3.format(",.0f");
 
 export const TimeSeries: D3Object<TimeSeriesConfig<any>> = {
   create: (el, data, config) => {
