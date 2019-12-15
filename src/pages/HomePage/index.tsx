@@ -7,8 +7,9 @@ import {
   Grid
 } from "@material-ui/core";
 import { useStyles } from "./styles";
-import SplashImage from "./splash.jpg";
+// import SplashImage from "./splash.jpg";
 import SplashSection from "./Splash";
+import { TextContent, HOME_TEXT } from "./TextContent";
 
 export const HomePage: React.FC = ({ children }) => {
   const classes = useStyles();
@@ -17,6 +18,7 @@ export const HomePage: React.FC = ({ children }) => {
       <SplashSection />;
       <Container>
         <Grid container>
+          <TextContent text={HOME_TEXT} />
           <Grid item xl={12}>
             <Typography variant="h4">What's this?</Typography>
             <Typography paragraph>

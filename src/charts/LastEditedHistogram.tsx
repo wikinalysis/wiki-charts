@@ -1,7 +1,7 @@
 import * as React from "react";
 import api from "../api";
 import { TimeSeriesConfig } from "../d3/TimeSeries";
-import { TimeSeries } from "../components/TimeSeries";
+import { TimeSeries } from "../components/D3Components";
 import { schemeCategory10 } from "d3";
 import { DEFAULT_CONFIG } from "./util";
 
