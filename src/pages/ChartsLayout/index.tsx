@@ -16,6 +16,7 @@ export const ChartsLayout: React.FC = ({ children }) => {
         label: `${wiki.language} (${wiki.languageLocal})`
       }));
       setLanguages(data);
+      setLanguage(data[0].value);
     });
   }, []);
   return (
