@@ -3,7 +3,7 @@ import { ChartsLayout } from "../ChartsLayout";
 import { Switch, Route } from "react-router-dom";
 import { LastEditedHistogram } from "../../charts/LastEditedHistogram";
 import { RevisionCountHistogram } from "../../charts/RevisionCountHistogram";
-import { TextLengthHistogram } from "../../charts/TextLengthHistogram";
+import { TextLengthHistogram } from "../TextLengthHistogram";
 import { LanguageContext } from "../../contexts/LanguageContext";
 
 export const Charts: React.FC = ({ children }) => {
@@ -20,12 +20,10 @@ export const Charts: React.FC = ({ children }) => {
           <RevisionCountHistogram language={language} />
         </Route>
         <Route path="/charts/length">
-          <h1>Article Length</h1>
-          <TextLengthHistogram language={language} />
+          <TextLengthHistogram />
         </Route>
         <Route path="/charts">
-          <h1>Article Length</h1>
-          <TextLengthHistogram language={language} />
+          <TextLengthHistogram />
         </Route>
       </Switch>
     </ChartsLayout>
