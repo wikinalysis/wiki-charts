@@ -1,8 +1,9 @@
 import * as React from "react";
-import api from "../../api";
-import { HistogramConfig } from "../../d3/Histogram";
-import { Histogram } from "../../components/Histogram";
+import api from "../api";
+import { HistogramConfig } from "../d3/Histogram";
+import { Histogram } from "../components/Histogram";
 import { schemeCategory10 } from "d3";
+import { DEFAULT_CONFIG } from "./util";
 
 export interface TextLengthHistogramProps {
   language: string;
@@ -22,9 +23,7 @@ class TextLengthHistogram extends React.Component<
     this.state = {
       data: [],
       config: {
-        margin: { left: 30, right: 30, top: 30, bottom: 30 },
-        height: 500,
-        width: 500,
+        ...DEFAULT_CONFIG,
         getX: d => d.textLength,
         getColor: _d => schemeCategory10[2],
         xMax: 100,
@@ -33,8 +32,18 @@ class TextLengthHistogram extends React.Component<
     };
   }
 
+  componentDidMount() {
+    this.update();
+  }
+
   componentDidUpdate(prevProps: TextLengthHistogramProps) {
     if (prevProps.language !== this.props.language) {
+      this.update();
+    }
+  }
+
+  update = () => {
+    if (this.props.language !== "") {
       api
         .getRevisionsField({
           language: this.props.language,
@@ -47,7 +56,7 @@ class TextLengthHistogram extends React.Component<
           });
         });
     }
-  }
+  };
 
   render() {
     return (

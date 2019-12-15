@@ -1,29 +1,29 @@
 import * as React from "react";
-import { Form, Field, FormSpy } from "react-final-form";
+import { Form, FormSpy, FormProps } from "react-final-form";
 import { Select } from "../Form/Inputs";
 import { FormState } from "final-form";
 
-export interface LanguageSelectProps {
+export interface LanguageSelectProps
+  extends Partial<JSX.IntrinsicElements["form"]> {
   languages: { value: string; label: string }[];
   setLanguage: (s: string) => void;
 }
 
-export const LanguageSelect: React.SFC<LanguageSelectProps> = props => {
+export const LanguageSelect: React.SFC<LanguageSelectProps> = ({
+  languages,
+  setLanguage,
+  ...rest
+}) => {
   return (
-    <Form onSubmit={({ language }) => props.setLanguage(language.value)}>
+    <Form onSubmit={_values => undefined}>
       {({ handleSubmit }) => (
-        <form onSubmit={handleSubmit}>
-          <Field
-            name="language"
-            component={Select}
-            options={props.languages}
-            placeholder="Select Language..."
-          />
+        <form onSubmit={handleSubmit} {...rest}>
+          <Select name="language" data={languages} label="Language" />
           <FormSpy
             subscription={{ values: true }}
             onChange={(formProps: FormState<any>) => {
               formProps.values.language &&
-                props.setLanguage(formProps.values.language.value);
+                setLanguage(formProps.values.language);
             }}
           />
         </form>
