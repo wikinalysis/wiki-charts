@@ -1,8 +1,9 @@
 import * as React from "react";
-import api from "../../api";
+import api from "../api";
 import { schemeCategory10 } from "d3";
-import { HistogramConfig } from "../../d3/Histogram";
-import { Histogram } from "../../components/Histogram";
+import { HistogramConfig } from "../d3/Histogram";
+import { Histogram } from "../components/Histogram";
+import { DEFAULT_CONFIG } from "./util";
 
 export interface RevisionCountHistogramProps {
   language: string;
@@ -26,9 +27,7 @@ class RevisionCountHistogram extends React.Component<
     this.state = {
       data: [],
       config: {
-        margin: { left: 30, right: 30, top: 30, bottom: 30 },
-        height: 500,
-        width: 500,
+        ...DEFAULT_CONFIG,
         getX: d => d.revisionCount,
         getColor: _d => schemeCategory10[0],
         xMax: 100,
@@ -37,8 +36,18 @@ class RevisionCountHistogram extends React.Component<
     };
   }
 
+  componentDidMount() {
+    this.update();
+  }
+
   componentDidUpdate(prevProps: RevisionCountHistogramProps) {
     if (prevProps.language !== this.props.language) {
+      this.update();
+    }
+  }
+
+  update = () => {
+    if (this.props.language !== "") {
       api
         .getPagesField({
           language: this.props.language,
@@ -54,14 +63,11 @@ class RevisionCountHistogram extends React.Component<
           });
         });
     }
-  }
+  };
 
   render() {
     return (
-        <Histogram
-          data={this.state.data}
-          config={this.state.config}
-        ></Histogram>
+      <Histogram data={this.state.data} config={this.state.config}></Histogram>
     );
   }
 }
