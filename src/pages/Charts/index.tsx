@@ -23,6 +23,10 @@ export const Charts: React.FC = ({ children }) => {
           <h1>Article Length</h1>
           <TextLengthHistogram language={language} />
         </Route>
+        <Route path="/charts">
+          <h1>Article Length</h1>
+          <TextLengthHistogram language={language} />
+        </Route>
       </Switch>
     </ChartsLayout>
   );
