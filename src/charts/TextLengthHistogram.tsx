@@ -1,7 +1,7 @@
 import * as React from "react";
 import api from "../api";
 import { HistogramConfig } from "../d3/Histogram";
-import { Histogram } from "../components/Histogram";
+import { Histogram } from "../components/D3Components";
 import { schemeCategory10 } from "d3";
 import { DEFAULT_CONFIG } from "./util";
 

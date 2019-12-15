@@ -2,7 +2,7 @@ import * as React from "react";
 import api from "../api";
 import { schemeCategory10 } from "d3";
 import { HistogramConfig } from "../d3/Histogram";
-import { Histogram } from "../components/Histogram";
+import { Histogram } from "../components/D3Components";
 import { DEFAULT_CONFIG } from "./util";
 
 export interface RevisionCountHistogramProps {
