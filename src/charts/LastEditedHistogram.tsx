@@ -1,81 +1,54 @@
 import * as React from "react";
 import api from "../api";
+import { schemeCategory10 } from "d3";
 import { TimeSeriesConfig } from "../d3/TimeSeries";
 import { TimeSeries } from "../components/D3Components";
-import { schemeCategory10 } from "d3";
 import { DEFAULT_CONFIG } from "./util";
 
 export interface LastEditedHistogramProps {
   language: string;
 }
 
-interface LastEditedHistogramState {
-  data: { id: string; language: string; createdAt: string }[];
-  config: TimeSeriesConfig<{
-    id: string;
-    language: string;
-    createdAt: string;
-  }>;
+interface ChartData {
+  id: string;
+  language: string;
+  createdAt: string;
 }
 
-class LastEditedHistogram extends React.Component<
-  LastEditedHistogramProps,
-  LastEditedHistogramState
-> {
-  constructor(props: LastEditedHistogramProps) {
-    super(props);
-    this.state = {
-      data: [],
-      config: {
-        ...DEFAULT_CONFIG,
-        title: "Distribution of Last Edit Time",
-        xLabel: "Most Recent Edit",
-        yLabel: "Count",
-        getX: d => d.createdAt,
-        getColor: _d => schemeCategory10[1],
-        xMax: "2000-01-01T00:00:00Z",
-        xMin: "2020-01-01T00:00:00Z"
-      }
-    };
-  }
-  componentDidMount() {
-    this.update();
-  }
+type ChartConfig = TimeSeriesConfig<ChartData>;
 
-  componentDidUpdate(prevProps: LastEditedHistogramProps) {
-    if (prevProps.language !== this.props.language) {
-      this.update();
-    }
-  }
+const INITIAL_CONFIG: ChartConfig = {
+  ...DEFAULT_CONFIG,
+  title: "Distribution of Last Edit Time",
+  xLabel: "Most Recent Edit",
+  yLabel: "Count",
+  getX: d => d.createdAt,
+  getColor: _d => schemeCategory10[1],
+  xMax: "2000-01-01T00:00:00Z",
+  xMin: "2020-01-01T00:00:00Z"
+};
 
-  update = () => {
-    if (this.props.language !== "") {
+export const LastEditedHistogram: React.FC<LastEditedHistogramProps> = props => {
+  const [config, setConfig] = React.useState(INITIAL_CONFIG);
+  const [data, setData] = React.useState<ChartData[]>([]);
+
+  React.useEffect(() => {
+    if (props.language !== "") {
       api
         .getRevisionsField({
-          language: this.props.language,
+          language: props.language,
           field: "createdAt"
         })
         .then(response => {
-          this.setState({
-            data: response.data as any,
-            config: {
-              ...this.state.config,
-              xMin: response.meta.minCreatedAt,
-              xMax: response.meta.maxCreatedAt
-            }
-          });
+          setConfig(state => ({
+            ...state,
+            xMin: response.meta.minCreatedAt,
+            xMax: response.meta.maxCreatedAt
+          }));
+          setData(response.data as any);
         });
     }
-  };
+  }, [props.language, setConfig, setData]);
 
-  render() {
-    return (
-      <TimeSeries
-        data={this.state.data}
-        config={this.state.config}
-      ></TimeSeries>
-    );
-  }
-}
-
-export { LastEditedHistogram };
+  return <TimeSeries data={data} config={config} />;
+};

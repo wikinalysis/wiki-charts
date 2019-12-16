@@ -5,6 +5,7 @@ import { LanguageSelect } from "../../components/LanguageSelect";
 import { LanguageContext } from "../../contexts/LanguageContext";
 import { Link } from "react-router-dom";
 
+// Minor MUI
 export const ChartsLayout: React.FC = ({ children }) => {
   const [_, setLanguage] = React.useContext(LanguageContext);
   const [languages, setLanguages] = React.useState([] as any[]);

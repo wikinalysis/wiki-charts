@@ -9,70 +9,45 @@ export interface RevisionCountHistogramProps {
   language: string;
 }
 
-interface RevisionCountHistogramState {
-  data: { id: string; language: string; revisionCount: number }[];
-  config: HistogramConfig<{
-    id: string;
-    language: string;
-    revisionCount: number;
-  }>;
+interface ChartData {
+  id: string;
+  language: string;
+  revisionCount: number;
 }
 
-class RevisionCountHistogram extends React.Component<
-  RevisionCountHistogramProps,
-  RevisionCountHistogramState
-> {
-  constructor(props: RevisionCountHistogramProps) {
-    super(props);
-    this.state = {
-      data: [],
-      config: {
-        ...DEFAULT_CONFIG,
-        title: "Distribution of Edit Count",
-        xLabel: "Total # of Edits",
-        yLabel: "Count",
-        getX: d => d.revisionCount,
-        getColor: _d => schemeCategory10[0],
-        xMax: 100,
-        binCount: 70
-      }
-    };
-  }
+type ChartConfig = HistogramConfig<ChartData>;
 
-  componentDidMount() {
-    this.update();
-  }
+const INITIAL_CONFIG: ChartConfig = {
+  ...DEFAULT_CONFIG,
+  title: "Distribution of Edit Count",
+  xLabel: "Total # of Edits",
+  yLabel: "Count",
+  getX: (d: any) => d.revisionCount,
+  getColor: (_d: any) => schemeCategory10[0],
+  xMax: 100,
+  binCount: 70
+};
 
-  componentDidUpdate(prevProps: RevisionCountHistogramProps) {
-    if (prevProps.language !== this.props.language) {
-      this.update();
-    }
-  }
+export const RevisionCountHistogram: React.FC<RevisionCountHistogramProps> = props => {
+  const [config, setConfig] = React.useState(INITIAL_CONFIG);
+  const [data, setData] = React.useState<ChartData[]>([]);
 
-  update = () => {
-    if (this.props.language !== "") {
+  React.useEffect(() => {
+    if (props.language !== "") {
       api
         .getPagesField({
-          language: this.props.language,
+          language: props.language,
           field: "revisionCount"
         })
         .then(response => {
-          this.setState({
-            data: response.data as any,
-            config: {
-              ...this.state.config,
-              xMax: response.meta.maxRevisionCount
-            }
-          });
+          setConfig(state => ({
+            ...state,
+            xMax: response.meta.maxRevisionCount
+          }));
+          setData(response.data as any);
         });
     }
-  };
+  }, [props.language, setConfig, setData]);
 
-  render() {
-    return (
-      <Histogram data={this.state.data} config={this.state.config}></Histogram>
-    );
-  }
-}
-
-export { RevisionCountHistogram };
+  return <Histogram data={data} config={config} />;
+};

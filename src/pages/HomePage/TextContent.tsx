@@ -85,6 +85,7 @@ export const HOME_TEXT: TextTable = [
   ]
 ];
 
+// Minor MUI
 export const TextContent: React.FC<{ text: TextTable }> = props => {
   return (
     <>
