@@ -7,6 +7,7 @@ export interface ChartInfoProps {
   chartComponent: React.ComponentType<{ language: string }>;
 }
 
+// Minor MUI
 export const ChartInfo: React.FC<ChartInfoProps> = ({
   chartComponent: Component,
   ...props

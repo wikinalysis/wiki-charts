@@ -4,6 +4,7 @@ import { CssBaseline, ThemeProvider } from "@material-ui/core";
 import { LanguageProvider } from "../../contexts/LanguageContext";
 import theme from "./theme";
 
+// Minor MUI
 export const AppLayout: React.FC = ({ children }) => {
   return (
     <BrowserRouter>

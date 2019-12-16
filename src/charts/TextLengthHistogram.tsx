@@ -9,63 +9,45 @@ export interface TextLengthHistogramProps {
   language: string;
 }
 
-interface TextLengthHistogramState {
-  data: { id: string; language: string; textLength: number }[];
-  config: HistogramConfig<{ id: string; language: string; textLength: number }>;
+interface ChartData {
+  id: string;
+  language: string;
+  textLength: number;
 }
 
-class TextLengthHistogram extends React.Component<
-  TextLengthHistogramProps,
-  TextLengthHistogramState
-> {
-  constructor(props: TextLengthHistogramProps) {
-    super(props);
-    this.state = {
-      data: [],
-      config: {
-        ...DEFAULT_CONFIG,
-        title: "Distribution of Article Length",
-        xLabel: "Article Length",
-        yLabel: "Count",
-        getX: d => d.textLength,
-        getColor: _d => schemeCategory10[2],
-        xMax: 100,
-        binCount: 70
-      }
-    };
-  }
+type ChartConfig = HistogramConfig<ChartData>;
 
-  componentDidMount() {
-    this.update();
-  }
+const INITIAL_CONFIG: ChartConfig = {
+  ...DEFAULT_CONFIG,
+  title: "Distribution of Article Length",
+  xLabel: "Article Length",
+  yLabel: "Count",
+  getX: d => d.textLength,
+  getColor: _d => schemeCategory10[2],
+  xMax: 100,
+  binCount: 70
+};
 
-  componentDidUpdate(prevProps: TextLengthHistogramProps) {
-    if (prevProps.language !== this.props.language) {
-      this.update();
-    }
-  }
+export const TextLengthHistogram: React.FC<TextLengthHistogramProps> = props => {
+  const [config, setConfig] = React.useState(INITIAL_CONFIG);
+  const [data, setData] = React.useState<ChartData[]>([]);
 
-  update = () => {
-    if (this.props.language !== "") {
+  React.useEffect(() => {
+    if (props.language !== "") {
       api
         .getRevisionsField({
-          language: this.props.language,
+          language: props.language,
           field: "textLength"
         })
         .then(response => {
-          this.setState({
-            data: response.data as any,
-            config: { ...this.state.config, xMax: response.meta.maxTextLength }
-          });
+          setConfig(state => ({
+            ...state,
+            xMax: response.meta.maxTextLength
+          }));
+          setData(response.data as any);
         });
     }
-  };
+  }, [props.language, setConfig, setData]);
 
-  render() {
-    return (
-      <Histogram data={this.state.data} config={this.state.config}></Histogram>
-    );
-  }
-}
-
-export { TextLengthHistogram };
+  return <Histogram data={data} config={config} />;
+};

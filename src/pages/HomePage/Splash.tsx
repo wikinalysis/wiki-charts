@@ -8,6 +8,7 @@ import SplashImage from "./splash.jpg";
 // @ts-ignore
 import { useHistory } from "react-router-dom";
 
+// Major MUI
 const useStyles = makeStyles(theme => ({
   mainFeaturedPost: {
     position: "relative",
