@@ -28,6 +28,9 @@ class RevisionCountHistogram extends React.Component<
       data: [],
       config: {
         ...DEFAULT_CONFIG,
+        title: "Distribution of Edit Count",
+        xLabel: "Total # of Edits",
+        yLabel: "Count",
         getX: d => d.revisionCount,
         getColor: _d => schemeCategory10[0],
         xMax: 100,

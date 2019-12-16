@@ -28,6 +28,9 @@ class LastEditedHistogram extends React.Component<
       data: [],
       config: {
         ...DEFAULT_CONFIG,
+        title: "Distribution of Last Edit Time",
+        xLabel: "Most Recent Edit",
+        yLabel: "Count",
         getX: d => d.createdAt,
         getColor: _d => schemeCategory10[1],
         xMax: "2000-01-01T00:00:00Z",

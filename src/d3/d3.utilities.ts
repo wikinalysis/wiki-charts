@@ -41,19 +41,55 @@ export const createSvgContainer = (
 };
 
 export const appendAxes = (
-  config: { height: number },
+  config: ID3Config<{}>,
   chart: any,
   xAxis: any,
   yAxis: any
 ) => {
+  const { height, width, margin, title, xLabel, yLabel } = config;
+
+  // Add X Axis
   chart
     .append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + config.height + ")")
+    .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(xAxis));
 
+  // Add Y Axis
   chart
     .append("g")
     .attr("class", "y axis")
     .call(d3.axisLeft(yAxis));
+
+  // Add Title
+  chart
+    .append("text")
+    .attr("x", width / 2)
+    .attr("y", 0 - margin.top / 2)
+    .attr("text-anchor", "middle")
+    .style("font-size", "16px")
+    .style("text-decoration", "underline")
+    .text(title);
+
+  // Add X Axis Label
+  chart
+    .append("text")
+    .attr("class", "x-axis-label")
+    .attr(
+      "transform",
+      "translate(" + width / 2 + " ," + (height + margin.top + 20) + ")"
+    )
+    .style("text-anchor", "middle")
+    .text(xLabel);
+
+  // Add Y Axis Label
+  chart
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("class", "y-axis-label")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - height / 2)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text(yLabel);
 };
