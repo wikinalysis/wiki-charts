@@ -24,6 +24,9 @@ class TextLengthHistogram extends React.Component<
       data: [],
       config: {
         ...DEFAULT_CONFIG,
+        title: "Distribution of Article Length",
+        xLabel: "Article Length",
+        yLabel: "Count",
         getX: d => d.textLength,
         getColor: _d => schemeCategory10[2],
         xMax: 100,

@@ -34,10 +34,10 @@ export const Histogram: D3Object<HistogramConfig<any>> = {
     const xAxis = createXAxis(config);
     const histogram = createHistogram(config, xAxis);
     const bins = histogram(data as any[]);
-    const yAxis = d3
-      .scaleLinear()
-      .range([config.height, 0])
-      .domain([0, d3.max(bins, d => d.length) as number]);
+    const yAxis = createYAxis({
+      yMax: d3.max(bins, d => d.length) || 0,
+      height: config.height
+    });
 
     appendAxes(config, svg, xAxis, yAxis);
 

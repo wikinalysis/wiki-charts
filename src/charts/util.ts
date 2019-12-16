@@ -1,4 +1,4 @@
-export const DEFAULT_MARGINS = { left: 30, right: 30, top: 30, bottom: 30 };
+export const DEFAULT_MARGINS = { left: 50, right: 30, top: 30, bottom: 50 };
 
 export const DEFAULT_CONFIG = {
   margin: DEFAULT_MARGINS,
