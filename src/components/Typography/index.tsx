@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Typography as MuiTypography } from "@material-ui/core";
 
-export interface TypographyProps {
+export interface TypographyProps extends Partial<JSX.IntrinsicElements["p"]> {
   variant?:
     | "h1"
     | "h2"

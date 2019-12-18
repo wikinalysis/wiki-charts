@@ -5,7 +5,8 @@ import {
   createYAxis,
   createSvgContainer,
   createDefaultTransition,
-  appendAxes
+  appendAxes,
+  transitionAxes
 } from "./d3.utilities";
 
 export interface ScatterPlotConfig<P> extends ID3Config<P> {
@@ -30,14 +31,7 @@ export const ScatterPlot: D3Object<ScatterPlotConfig<any>> = {
     const yAxis = createYAxis(config);
     const t = createDefaultTransition();
 
-    chart
-      .select(".x")
-      .transition(t)
-      .call(d3.axisBottom(xAxis) as any);
-    chart
-      .select(".y")
-      .transition(t)
-      .call(d3.axisLeft(yAxis) as any);
+    transitionAxes(chart, t, yAxis, xAxis);
 
     const points = chart.selectAll("circle").data(data);
     points.exit().remove();

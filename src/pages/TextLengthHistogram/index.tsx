@@ -1,10 +1,9 @@
 import * as React from "react";
-import { Paper } from "@material-ui/core";
+import { Paper } from "../../components/Paper";
 import { TextLengthHistogram as Chart } from "../../charts/TextLengthHistogram";
 import { Typography } from "../../components/Typography";
 import { ChartInfo } from "../ChartInfo";
 
-// Minor MUI
 export const TextLengthHistogram: React.FC = props => {
   return (
     <ChartInfo chartHeader="Article Length" chartComponent={Chart}>

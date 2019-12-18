@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Grid, Paper } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
+import { Paper } from "../../components/Paper";
 import { LanguageContext } from "../../contexts/LanguageContext";
 
 export interface ChartInfoProps {
@@ -14,10 +15,9 @@ export const ChartInfo: React.FC<ChartInfoProps> = ({
 }) => {
   const [language, _] = React.useContext(LanguageContext);
   return (
-    <Grid>
-      <Grid>
+    <Grid container>
+      <Grid item>
         <Paper>
-          <h4>{props.chartHeader}</h4>
           <Component language={language} />
         </Paper>
       </Grid>

@@ -28,16 +28,29 @@ export const createSvgContainer = (
   el: RefObject<any>,
   config: ID3Config<any>
 ) => {
+  const totalHeight = config.height + config.margin.top + config.margin.bottom;
+  const totalWidth = config.width + config.margin.left + config.margin.right;
   return d3
     .select(el as any)
     .append("svg")
-    .attr("width", config.width + config.margin.left + config.margin.right)
-    .attr("height", config.height + config.margin.top + config.margin.bottom)
+    .attr("viewBox", "0 0 " + totalWidth + " " + totalHeight)
+    .attr("preserveAspectRatio", "xMidYMid meet")
     .append("g")
     .attr(
       "transform",
       "translate(" + config.margin.left + "," + config.margin.top + ")"
     );
+};
+
+export const transitionAxes = (chart: any, t: any, yAxis: any, xAxis: any) => {
+  chart
+    .select(".x")
+    .transition(t)
+    .call(d3.axisBottom(xAxis) as any);
+  chart
+    .select(".y")
+    .transition(t)
+    .call(d3.axisLeft(yAxis) as any);
 };
 
 export const appendAxes = (

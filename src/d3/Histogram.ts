@@ -5,7 +5,8 @@ import {
   createSvgContainer,
   createYAxis,
   createDefaultTransition,
-  appendAxes
+  appendAxes,
+  transitionAxes
 } from "./d3.utilities";
 import { Bin } from "d3";
 
@@ -53,14 +54,7 @@ export const Histogram: D3Object<HistogramConfig<any>> = {
     });
     const t = createDefaultTransition();
 
-    chart
-      .select(".x")
-      .transition(t)
-      .call(d3.axisBottom(xAxis) as any);
-    chart
-      .select(".y")
-      .transition(t)
-      .call(d3.axisLeft(yAxis) as any);
+    transitionAxes(chart, t, yAxis, xAxis);
 
     const points = chart.selectAll("rect").data(bins);
     points.exit().remove();

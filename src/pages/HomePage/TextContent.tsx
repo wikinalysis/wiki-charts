@@ -1,5 +1,7 @@
 import * as React from "react";
+import clsx from "clsx";
 import { Grid } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { TypographyProps, Typography } from "../../components/Typography";
 
 export type TextTable = { props: TypographyProps; text: React.ReactNode }[][];
@@ -72,32 +74,46 @@ export const HOME_TEXT: TextTable = [
       props: { paragraph: true },
       text: (
         <>
-          This page is built using a combination of Apache BEAM (a data
-          processing platform originally developed by Google), the Phoenix
-          Framework (a highly scalable web framework based on Elixir), ReactJS
-          (a frontend framework developed by Facebook), and d3js (the gold
-          standard for web visualizations). It uses Scala, Elixir, and
-          Typescript. The whole application is hosted on Google Cloud Platform
-          for about $10 a month.
+          This page is built using a combination of Apache BEAM, the Phoenix
+          Framework, React, and d3. It uses Scala, Elixir, and Typescript. The
+          whole application is hosted on Google Cloud Platform for about $10 a
+          month.
         </>
       )
     }
   ]
 ];
 
+// Major MUI
+const useStyles = makeStyles(_theme => ({
+  text: {
+    textAlign: "justify"
+  }
+}));
+
 // Minor MUI
 export const TextContent: React.FC<{ text: TextTable }> = props => {
+  const classes = useStyles();
   return (
     <>
-      {props.text.map((row, i) => (
-        <Grid key={i} item md={6}>
-          {row.map((text, i) => (
-            <Typography key={i} {...text.props}>
-              {text.text}
-            </Typography>
-          ))}
-        </Grid>
-      ))}
+      {props.text.map((row, i) => {
+        return (
+          <Grid key={i} item md={6}>
+            {row.map((text, i) => {
+              const { className: klass, ...restProps } = text.props;
+              return (
+                <Typography
+                  key={i}
+                  className={clsx(classes.text, klass)}
+                  {...restProps}
+                >
+                  {text.text}
+                </Typography>
+              );
+            })}
+          </Grid>
+        );
+      })}
     </>
   );
 };
