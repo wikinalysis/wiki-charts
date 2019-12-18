@@ -1,29 +1,46 @@
 import * as React from "react";
+import { Grid } from "@material-ui/core";
 import { ChartsLayout } from "../ChartsLayout";
 import { Switch, Route } from "react-router-dom";
+import { Paper } from "../../components/Paper";
 import { LastEditedHistogram } from "../../charts/LastEditedHistogram";
 import { RevisionCountHistogram } from "../../charts/RevisionCountHistogram";
-import { TextLengthHistogram } from "../TextLengthHistogram";
+import { TextLengthHistogram } from "../../charts/TextLengthHistogram";
 import { LanguageContext } from "../../contexts/LanguageContext";
+import { makeStyles } from "@material-ui/core/styles";
+
+// Major MUI
+const useStyles = makeStyles(theme => ({
+  root: {
+    margin: theme.spacing(1),
+    padding: theme.spacing(1)
+  }
+}));
 
 export const Charts: React.FC = ({ children }) => {
   const [language, _] = React.useContext(LanguageContext);
+  const classes = useStyles();
   return (
     <ChartsLayout>
       <Switch>
-        <Route path="/charts/last-edited">
-          <h1>Latest Revision</h1>
-          <LastEditedHistogram language={language} />
-        </Route>
-        <Route path="/charts/activity">
-          <h1>Total Revisions</h1>
-          <RevisionCountHistogram language={language} />
-        </Route>
-        <Route path="/charts/length">
-          <TextLengthHistogram />
-        </Route>
         <Route path="/charts">
-          <TextLengthHistogram />
+          <Grid container>
+            <Grid item xs={12} sm={6}>
+              <Paper className={classes.root}>
+                <LastEditedHistogram language={language} />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper className={classes.root}>
+                <RevisionCountHistogram language={language} />
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Paper className={classes.root}>
+                <TextLengthHistogram language={language} />
+              </Paper>
+            </Grid>
+          </Grid>
         </Route>
       </Switch>
     </ChartsLayout>

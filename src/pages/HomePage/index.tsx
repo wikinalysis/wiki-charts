@@ -9,7 +9,7 @@ export const HomePage: React.FC = () => {
     <>
       <SplashSection />;
       <Container>
-        <Grid container>
+        <Grid container spacing={3}>
           <TextContent text={HOME_TEXT} />
         </Grid>
       </Container>
