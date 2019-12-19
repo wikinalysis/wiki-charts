@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
     backgroundImage: `url(${SplashImage})`,
     color: theme.palette.common.white,
     marginBottom: theme.spacing(4),
-    height: "60vh",
+    minHeight: "60vh",
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center"
