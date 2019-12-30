@@ -17,6 +17,14 @@ export const createYAxis = (config: { yMax: number; height: number }) => {
     .range([config.height, 0]);
 };
 
+// d3
+//       .scaleTime()
+//       .domain([
+//         parseDate(config.xMin) || new Date(),
+//         parseDate(config.xMax) || new Date()
+//       ])
+//       .rangeRound([0, config.width]);
+
 export const createXAxis = (config: { xMax: number; width: number }) => {
   return d3
     .scaleLinear()
@@ -65,6 +73,7 @@ export const appendAxes = (
   chart
     .append("g")
     .attr("class", "x axis")
+    .attr("zIndex", 10)
     .attr("transform", "translate(0," + height + ")")
     .call(d3.axisBottom(xAxis));
 

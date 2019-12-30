@@ -7,99 +7,62 @@ import {
   appendAxes,
   transitionAxes
 } from "./d3.utilities";
-import { Bin } from "d3";
 
 export interface TimeSeriesConfig<P> extends ID3Config<P> {
   xMin: string;
   xMax: string;
+  yMax: number;
 }
 
-const createTimeSeries = (config: TimeSeriesConfig<any>, xAxis: any) => {
+const parseDate = d3.timeParse("%Y%m");
+
+const createTimeXAxis = (config: any) => {
   return d3
-    .histogram()
-    .value(v => v)
-    .domain(xAxis.domain())
-    .thresholds(xAxis.ticks(d3.timeMonth));
+    .scaleTime()
+    .domain([
+      parseDate(config.xMin) || new Date(),
+      parseDate(config.xMax) || new Date()
+    ])
+    .rangeRound([0, config.width]);
 };
-
-const safeLength = (yAxis: any, d: any) => {
-  const length = yAxis(d.length);
-  return !isNaN(length) ? length : 0;
-};
-
-const parseDate = d3.timeParse("%Y-%m-%dT%H:%M:%SZ");
 
 export const TimeSeries: D3Object<TimeSeriesConfig<any>> = {
   create: (el, data, config) => {
     const svg = createSvgContainer(el, config);
-    const xAxis = d3
-      .scaleTime()
-      .domain([
-        parseDate(config.xMin) || new Date(),
-        parseDate(config.xMax) || new Date()
-      ])
-      .rangeRound([0, config.width]);
-    const histogram = createTimeSeries(config, xAxis);
-    const newData = data
-      .map(d => parseDate(config.getX(d)))
-      .filter(d => d != null) as Date[];
-    const bins = histogram(newData as any);
-    const yAxis = createYAxis({
-      yMax: d3.max(bins, d => d.length) || 0,
-      height: config.height
-    });
+
+    const xAxis = createTimeXAxis(config);
+    const yAxis = createYAxis(config);
 
     appendAxes(config, svg, xAxis, yAxis);
 
     return svg;
   },
-  update: (el, data, config, chart) => {
-    const xAxis = d3
-      .scaleTime()
-      .domain([
-        parseDate(config.xMin) || new Date(),
-        parseDate(config.xMax) || new Date()
-      ])
-      .rangeRound([0, config.width]);
-    const histogram = createTimeSeries(config, xAxis);
-    const newData = data
-      .map(d => parseDate(config.getX(d)))
-      .filter(d => d != null) as Date[];
-    const bins = histogram(newData as any);
-    const yAxis = createYAxis({
-      yMax: d3.max(bins, d => d.length) || 0,
-      height: config.height
-    });
+  update: (_el, data, config, chart) => {
+    const xAxis = createTimeXAxis(config);
+    const yAxis = createYAxis(config);
     const t = createDefaultTransition();
 
     transitionAxes(chart, t, yAxis, xAxis);
 
-    const points = chart.selectAll("rect").data(bins);
-    points.exit().remove();
-    points
+    const bars = chart.selectAll("rect").data(data);
+    bars.exit().remove();
+    bars
       .enter()
       .append("rect")
-      .merge(points)
+      .merge(bars as any)
       .transition(t)
-      .attr("x", 1)
-      .attr(
-        "transform",
-        (d: Bin<number, number>) =>
-          `translate(${xAxis(d.x0 as any)}, ${safeLength(yAxis, d)})`
-      )
+      .attr("height", (d: any) => config.height - yAxis(d.count))
+      .attr("y", (d: any) => yAxis(d.count))
+      .attr("x", (d: any) => xAxis(parseDate(d.floor) as any))
       .attr(
         "width",
-        (d: Bin<number, number>) => xAxis(d.x1 as any) - xAxis(d.x0 as number)
-      )
-      .attr(
-        "height",
-        (d: Bin<number, number>) => config.height - safeLength(yAxis, d)
+        (d: any) =>
+          xAxis(parseDate(d.ceiling) as any) - xAxis(parseDate(d.floor) as any)
       )
       .style("fill", config.getColor);
-
     return undefined;
   },
-  destroy: (el, config, chart) => {
+  destroy: (_el, _config, _chart) => {
     return undefined;
   }
 };

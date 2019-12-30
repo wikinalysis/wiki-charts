@@ -25,7 +25,7 @@ const INITIAL_CONFIG: ChartConfig = {
   getX: (d: any) => d.revisionCount,
   getColor: (_d: any) => schemeCategory10[0],
   xMax: 100,
-  binCount: 70
+  yMax: 1000
 };
 
 export const RevisionCountHistogram: React.FC<RevisionCountHistogramProps> = props => {
@@ -35,14 +35,15 @@ export const RevisionCountHistogram: React.FC<RevisionCountHistogramProps> = pro
   React.useEffect(() => {
     if (props.language !== "") {
       api
-        .getPagesField({
+        .getPagesHistogram({
           language: props.language,
           field: "revisionCount"
         })
         .then(response => {
           setConfig(state => ({
             ...state,
-            xMax: response.meta.maxRevisionCount
+            xMax: response.meta.maximum,
+            yMax: Math.max(...response.data.map(v => v.count))
           }));
           setData(response.data as any);
         });

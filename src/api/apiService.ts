@@ -44,7 +44,7 @@ export const createApiService = (axios: AxiosInstance) => ({
   }) => {
     return axios.get("/histogram/revisions", { params }) as Promise<
       ApiResponse<
-        { floor: any; ceiling: any; count: number },
+        { floor: any; ceiling: any; count: number }[],
         { minimum: any; maximum: any }
       >
     >;
@@ -52,7 +52,7 @@ export const createApiService = (axios: AxiosInstance) => ({
   getPagesHistogram: (params: { language: string; field: "revisionCount" }) => {
     return axios.get("/histogram/pages", { params }) as Promise<
       ApiResponse<
-        { floor: any; ceiling: any; count: number },
+        { floor: any; ceiling: any; count: number }[],
         { minimum: any; maximum: any }
       >
     >;

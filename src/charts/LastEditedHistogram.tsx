@@ -24,8 +24,9 @@ const INITIAL_CONFIG: ChartConfig = {
   yLabel: "Count",
   getX: d => d.createdAt,
   getColor: _d => schemeCategory10[1],
-  xMax: "2000-01-01T00:00:00Z",
-  xMin: "2020-01-01T00:00:00Z"
+  xMax: "200001",
+  xMin: "202001",
+  yMax: 1000
 };
 
 export const LastEditedHistogram: React.FC<LastEditedHistogramProps> = props => {
@@ -35,15 +36,16 @@ export const LastEditedHistogram: React.FC<LastEditedHistogramProps> = props => 
   React.useEffect(() => {
     if (props.language !== "") {
       api
-        .getRevisionsField({
+        .getRevisionsHistogram({
           language: props.language,
           field: "createdAt"
         })
         .then(response => {
           setConfig(state => ({
             ...state,
-            xMin: response.meta.minCreatedAt,
-            xMax: response.meta.maxCreatedAt
+            xMin: response.meta.minimum,
+            xMax: response.meta.maximum,
+            yMax: Math.max(...response.data.map(v => v.count))
           }));
           setData(response.data as any);
         });

@@ -25,7 +25,7 @@ const INITIAL_CONFIG: ChartConfig = {
   getX: d => d.textLength,
   getColor: _d => schemeCategory10[2],
   xMax: 100,
-  binCount: 70
+  yMax: 1000
 };
 
 export const TextLengthHistogram: React.FC<TextLengthHistogramProps> = props => {
@@ -35,14 +35,15 @@ export const TextLengthHistogram: React.FC<TextLengthHistogramProps> = props => 
   React.useEffect(() => {
     if (props.language !== "") {
       api
-        .getRevisionsField({
+        .getRevisionsHistogram({
           language: props.language,
           field: "textLength"
         })
         .then(response => {
           setConfig(state => ({
             ...state,
-            xMax: response.meta.maxTextLength
+            xMax: response.meta.maximum,
+            yMax: Math.max(...response.data.map(v => v.count))
           }));
           setData(response.data as any);
         });
